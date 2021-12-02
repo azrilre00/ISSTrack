@@ -4,7 +4,16 @@
     </head>
     <body>
         <h3>Insert Date</h3>
-        <input type="date" name="calendar">
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="birthdaytime">ISS Location (date and time):</label>
+            <input type="date" id="ime" name="date">
+            <input type="time" id="ime" name="time"> 
+            
+            <input type="submit">
+          </form>
+          
+          <p><strong>Note:</strong> type="datetime-local" is not supported in Internet Explorer 11 or prior Safari 14.1.</p>
         {{ result }}
     </body>
 </html>
