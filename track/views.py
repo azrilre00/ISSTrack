@@ -22,29 +22,23 @@ def displayISS(request):
 
     if request.POST:
         date = request.POST['date']
-        # print(type(date))
-        # print(date)
         time = request.POST['time']
-        # print(daytime)
         
         datetimes_ISS = str(date + " " + time)
-        # print(type(datetimes_ISS))
-        # print(datetimes_ISS)
         date_time_obj = datetime.strptime(datetimes_ISS, '%Y-%m-%d %H:%M')
         times = datetime.timestamp(date_time_obj)
 
         list_times_after = []
         list_times_before = []
         t1 = date_time_obj
+
         for i in range(5):
             time_b4 = t1 + timedelta(minutes=10)
-            # print(time_b4)
             list_times_after.append(time_b4)
             t1 = time_b4
-        # print(list_times[1])
+
         for i in range(5):
             time_b4 = date_time_obj + timedelta(minutes=-10)
-            # print(time_b4)
             list_times_before.append(time_b4)
             date_time_obj = time_b4
         # print(date_time_obj)
@@ -52,19 +46,22 @@ def displayISS(request):
         # print(times)
         # print(list_times)
         urltime = url + "?timestamp=" + str(times)
-        # print(urltime)
         response = urllib.request.urlopen(urltime) 
         result = json.loads(response.read())
+
         latitude = str(result["latitude"])
         longitude = str(result["longitude"])
+
         geolocator = Nominatim(user_agent="geoapiExercises")
         location = geolocator.reverse(latitude+", "+longitude)
+
+        for i in list_times_after:
+            print(i)
+
         
         if location == None:
             print("The ISS location probably in a location where coverage is not available")
         else:
-            
-
             # print(location.raw, latitude + ", " + longitude)
             context['location'] = location.address
             context['latitude'] = latitude
@@ -75,16 +72,30 @@ def displayISS(request):
             context['dates_before'] = list_times_before
         return render(request, 'home.html', context)
         # return redirect('home')
-    else:
-        
-        latitude = str(result["latitude"])
-        longitude = str(result["longitude"])
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.reverse(latitude+", "+longitude)
-        # location = geolocator.reverse("3.1275272211037284 , 101.59307183409135")
-        # print(result['iss_position']["longitude"])
-        
-        # print(location, latitude + ", " + longitude)
-        
     return render(request, 'home.html', context)
 
+
+def after_date(request, date, times):
+    url = "https://api.wheretheiss.at/v1/satellites/25544"
+    response = urllib.request.urlopen(url) 
+    result = json.loads(response.read())
+    list_times_after = []
+    list_times_before = []
+    t1 = date
+
+
+    for i in range(5):
+        time_b4 = t1 + timedelta(minutes=10)
+        list_times_after.append(time_b4)
+        t1 = time_b4
+        urltime = url + "?timestamp=" + str(times)
+        response = urllib.request.urlopen(urltime) 
+        result = json.loads(response.read())
+
+        latitude = str(result["latitude"])
+        longitude = str(result["longitude"])
+
+        geolocator = Nominatim(user_agent="geoapiExercises")
+        location = geolocator.reverse(latitude+", "+longitude)
+
+        
