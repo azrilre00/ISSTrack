@@ -21,10 +21,10 @@ def displayISS(request):
         latitude = str(result["latitude"])
         longitude = str(result["longitude"])
         geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.reverse(latitude+","+longitude)
-        # location = geolocator.reverse("11.001202151377, -125.29176594612")
+        location = geolocator.reverse(latitude+", "+longitude)
+        # location = geolocator.reverse("3.1275272211037284 , 101.59307183409135")
         # print(result['iss_position']["longitude"])
-        print(location, latitude, longitude)
+        print(location, latitude + ", " + longitude)
         context = {'result':result}
         return render(request, 'home.html', context)
 
