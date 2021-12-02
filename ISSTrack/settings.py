@@ -109,7 +109,7 @@ LANGUAGE_CODE = 'en-us'
 
 DATETIME_INPUT_FORMATS = ['%d/%m/%Y %H:%M:%S']
 
-TIME_ZONE = 'Asia/Kuala Lumpur'
+TIME_ZONE = 'Asia/Kuala_Lumpur'
 
 USE_I18N = True
 

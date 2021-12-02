@@ -7,13 +7,29 @@
         <form action="" method="post">
             {% csrf_token %}
             <label for="birthdaytime">ISS Location (date and time):</label>
-            <input type="date" id="ime" name="date">
-            <input type="time" id="ime" name="time"> 
+            <input type="date" id="ime" name="date" required>
+            <input type="time" id="ime" name="time" required> 
             
             <input type="submit">
           </form>
-          
-          <p><strong>Note:</strong> type="datetime-local" is not supported in Internet Explorer 11 or prior Safari 14.1.</p>
-        {{ result }}
+        {% comment %} {{ result }} {% endcomment %}
+        <p>
+            <span>ISS Location : <b>{{ location }}</b></span>
+            <br>
+            <span>Latitude : <b>{{ latitude }} </b></span>
+            <br>
+            <span>Longitude : <b>{{ longitude }} </b></span>
+            <br>
+            <span>Date Chosen : <b>{{ date }} </b></span>
+            <br>
+            <span>Time Chosen : <b>{{ time }}</b></span>
+        </p>
+        <hr>
+        <p>
+            {% for i in dates %}
+                <b>Date : </b> {{ i }}
+                <br>
+            {% endfor %}
+        </p>
     </body>
 </html>

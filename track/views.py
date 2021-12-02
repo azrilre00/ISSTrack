@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from geopy.geocoders import Nominatim
-from datetime import datetime
+from datetime import datetime, timedelta
 import urllib.request 
 import json
 from track.forms import ISSForm
@@ -32,9 +32,23 @@ def displayISS(request):
         # print(datetimes_ISS)
         date_time_obj = datetime.strptime(datetimes_ISS, '%Y-%m-%d %H:%M')
         times = datetime.timestamp(date_time_obj)
+
+        list_times = []
+        for i in range(5):
+            time_b4 = date_time_obj + timedelta(minutes=10)
+            # print(time_b4)
+            list_times.append(time_b4)
+            date_time_obj = time_b4
+        # print(list_times[1])
+        for i in range(5):
+            time_b4 = date_time_obj + timedelta(minutes=-10)
+            # print(time_b4)
+            list_times.append(time_b4)
+            date_time_obj = time_b4
         # print(date_time_obj)
         # print(type(date_time_obj))
         # print(times)
+        # print(list_times)
         urltime = url + "?timestamp=" + str(times)
         # print(urltime)
         response = urllib.request.urlopen(urltime) 
@@ -43,8 +57,21 @@ def displayISS(request):
         longitude = str(result["longitude"])
         geolocator = Nominatim(user_agent="geoapiExercises")
         location = geolocator.reverse(latitude+", "+longitude)
-        print(location, latitude + ", " + longitude)
-        return redirect('home')
+        
+        if location == None:
+            print("The ISS location probably in a location where coverage is not available")
+        else:
+            
+
+            # print(location.raw, latitude + ", " + longitude)
+            context['location'] = location.address
+            context['latitude'] = latitude
+            context['longitude'] = longitude
+            context['time'] = time
+            context['date'] = date
+            context['dates'] = list_times
+        return render(request, 'home.html', context)
+        # return redirect('home')
     else:
         
         latitude = str(result["latitude"])
@@ -56,5 +83,5 @@ def displayISS(request):
         
         # print(location, latitude + ", " + longitude)
         
-        return render(request, 'home.html', context)
+    return render(request, 'home.html', context)
 
