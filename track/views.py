@@ -33,17 +33,19 @@ def displayISS(request):
         date_time_obj = datetime.strptime(datetimes_ISS, '%Y-%m-%d %H:%M')
         times = datetime.timestamp(date_time_obj)
 
-        list_times = []
+        list_times_after = []
+        list_times_before = []
+        t1 = date_time_obj
         for i in range(5):
-            time_b4 = date_time_obj + timedelta(minutes=10)
+            time_b4 = t1 + timedelta(minutes=10)
             # print(time_b4)
-            list_times.append(time_b4)
-            date_time_obj = time_b4
+            list_times_after.append(time_b4)
+            t1 = time_b4
         # print(list_times[1])
         for i in range(5):
             time_b4 = date_time_obj + timedelta(minutes=-10)
             # print(time_b4)
-            list_times.append(time_b4)
+            list_times_before.append(time_b4)
             date_time_obj = time_b4
         # print(date_time_obj)
         # print(type(date_time_obj))
@@ -69,7 +71,8 @@ def displayISS(request):
             context['longitude'] = longitude
             context['time'] = time
             context['date'] = date
-            context['dates'] = list_times
+            context['dates_after'] = list_times_after
+            context['dates_before'] = list_times_before
         return render(request, 'home.html', context)
         # return redirect('home')
     else:
